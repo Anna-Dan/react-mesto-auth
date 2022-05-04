@@ -7,9 +7,12 @@ import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
+import Login from "./Login";
+import Register from "./Register";
 import api from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-
+import { Route, Switch, useHistory } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -34,16 +37,17 @@ function App() {
   //лайки
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api.changeLike(card._id, isLiked)
-        .then((newCard) => {
-          setCards((state) =>
-           state.map((c) => (c._id === card._id ? newCard : c))
-          );   
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-}
+    api
+      .changeLike(card._id, isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   //удалить карточку
   function handleCardDelete(card) {
@@ -97,15 +101,23 @@ function App() {
   }
 
   //открытие попапов
-  function handleEditProfileClick() {setIsEditProfilePopupOpen(true);}
-  function handleEditAvatarClick() {setIsEditAvatarPopupOpen(true);}
-  function handleAddPlaceClick() {setIsAddPlacePopupOpen(true);}
-  function handleCardClick(card) {setSelectedCard(card);}
+  function handleEditProfileClick() {
+    setIsEditProfilePopupOpen(true);
+  }
+  function handleEditAvatarClick() {
+    setIsEditAvatarPopupOpen(true);
+  }
+  function handleAddPlaceClick() {
+    setIsAddPlacePopupOpen(true);
+  }
+  function handleCardClick(card) {
+    setSelectedCard(card);
+  }
 
   //закрытие попапов
-  function closeAllPopups() {    
+  function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
-    setIsEditAvatarPopupOpen(false);   
+    setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({});
   }
@@ -121,18 +133,29 @@ function App() {
       <div className="page">
         <div className="page__container">
           <Header />
+          {/* <Switch> */}
+             {/* <Route path="/sign-up"> */}
+              <Register  />
+            {/* </Route> * */}
+            {/* <Route path="/sign-in"> */}
+              {/* <Login  /> */}
+            {/* </Route> */}
+            {/* <ProtectedRoute
+              exact
+              path="/"
+              component={Main}
+              //loggedIn={loggedIn}
+              onEditAvatar={handleEditAvatarClick}
+              onEditProfile={handleEditProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onCardClick={handleCardClick}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDeleteClick={handleCardDelete}
+            ></ProtectedRoute> */}
+          {/* </Switch> */}
 
-          <Main
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onCardClick={handleCardClick}
-            cards={cards}
-            onCardLike={handleCardLike}
-            onCardDeleteClick={handleCardDelete}
-          />
-          
-          <Footer />
+          {/* <Footer /> */}
 
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
@@ -159,13 +182,13 @@ function App() {
             title="Вы уверены?"
             name="delete"
             buttonText="Да"
-            onClose={closeAllPopups}            
+            onClose={closeAllPopups}
             handleOverlayClose={handleOverlayClose}
           />
 
           <ImagePopup
-            onClose={closeAllPopups} 
-            card={selectedCard} 
+            onClose={closeAllPopups}
+            card={selectedCard}
             handleOverlayClose={handleOverlayClose}
           />
         </div>
