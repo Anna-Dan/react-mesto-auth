@@ -21,7 +21,7 @@ function Login(props) {
     if (!email || !password) {
       return;
     }
-    props.handleLogin(email, password);
+    props.handleLoginSubmit(password, email);
   }
 
   return (

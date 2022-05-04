@@ -1,4 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
+
+import api from "../utils/Api";
+import * as apiAuth from "../utils/apiAuth.js";
+
+import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import ProtectedRoute from "./ProtectedRoute";
+
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -9,10 +17,7 @@ import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
 import Login from "./Login";
 import Register from "./Register";
-import api from "../utils/Api";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { Route, Switch, useHistory } from "react-router-dom";
-import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -21,18 +26,11 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
-
-  //первоначальный рендер страницы
-  useEffect(() => {
-    Promise.all([api.getInitialCards(), api.getProfileInfo()])
-      .then((res) => {
-        setCards(res[0]);
-        setCurrentUser(res[1]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
+  const history = useHistory();
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [email, setEmail] = useState("");
+  const [register, setRegister] = useState(false);
 
   //лайки
   function handleCardLike(card) {
@@ -114,12 +112,18 @@ function App() {
     setSelectedCard(card);
   }
 
+  function handleInfoTooltipOpen(boolean) {
+    setRegister(boolean);
+    setIsInfoTooltipOpen(true);
+  }
+
   //закрытие попапов
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setSelectedCard({});
+    setIsInfoTooltipOpen(false);
   }
 
   function handleOverlayClose(e) {
@@ -128,23 +132,110 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    const closeByEscape = (e) => {
+      if (e.key === "Escape") {
+        closeAllPopups();
+      }
+    };
+    document.addEventListener("keydown", closeByEscape);
+    return () => document.removeEventListener("keydown", closeByEscape);
+  }, []);
+
+  /* Авторизация */
+  function handleLogin() {
+    setLoggedIn(true);
+  }
+
+  function handleRegisterSubmit(password, email) {
+    apiAuth
+      .register(password, email)
+      .then((res) => {
+        if (res.data) {
+          handleInfoTooltipOpen(true);
+          history.push("/sign-in");
+        }
+      })
+      .catch((err) => {
+        handleInfoTooltipOpen(false);
+        console.log(err.message);
+      });
+  }
+
+  function handleLoginSubmit(password, email) {
+    apiAuth
+      .authorize(password, email)
+      .then((res) => {
+        if (res.token) {
+          handleLogin();
+          history.push("/");
+        }
+      })
+      .catch((err) => {
+        handleInfoTooltipOpen(false);
+        console.log(err);
+      });
+  }
+
+  function handleTokenCheck() {
+    const token = localStorage.getItem("token");
+    if (localStorage.getItem("token")) {
+      apiAuth
+        .getContent(token)
+        .then((res) => {
+          if (res) {
+            setEmail(res.data.email);
+            setLoggedIn(true);
+            history.push("/");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+  useEffect(() => {
+    handleTokenCheck();
+  }, [loggedIn]);
+
+  useEffect(() => {
+    if (setLoggedIn) {
+      Promise.all([api.getInitialCards(), api.getProfileInfo()])
+        .then((res) => {
+          setCards(res[0]);
+          setCurrentUser(res[1]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
+
+  function onSingOut() {
+    localStorage.removeItem("token");
+    setEmail("");
+    setLoggedIn(false);
+    history.push("/sign-in");
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <div className="page__container">
-          <Header />
-          {/* <Switch> */}
-             {/* <Route path="/sign-up"> */}
-              <Register  />
-            {/* </Route> * */}
-            {/* <Route path="/sign-in"> */}
-              {/* <Login  /> */}
-            {/* </Route> */}
-            {/* <ProtectedRoute
+          <Header handleLogOut={onSingOut} email={email} />
+          <Switch>
+            <Route path="/sign-up">
+              <Register handleRegisterSubmit={handleRegisterSubmit} />
+            </Route>
+
+            <Route path="/sign-in">
+              <Login handleLoginSubmit={handleLoginSubmit} />
+            </Route>
+            <ProtectedRoute
               exact
               path="/"
               component={Main}
-              //loggedIn={loggedIn}
+              loggedIn={loggedIn}
               onEditAvatar={handleEditAvatarClick}
               onEditProfile={handleEditProfileClick}
               onAddPlace={handleAddPlaceClick}
@@ -152,10 +243,10 @@ function App() {
               cards={cards}
               onCardLike={handleCardLike}
               onCardDeleteClick={handleCardDelete}
-            ></ProtectedRoute> */}
-          {/* </Switch> */}
+            ></ProtectedRoute>
+          </Switch>
 
-          {/* <Footer /> */}
+          <Footer />
 
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
@@ -190,6 +281,12 @@ function App() {
             onClose={closeAllPopups}
             card={selectedCard}
             handleOverlayClose={handleOverlayClose}
+          />
+          <InfoTooltip
+            onClose={closeAllPopups}
+            isOpen={isInfoTooltipOpen}
+            handleOverlayClose={handleOverlayClose}
+            register={register}
           />
         </div>
       </div>

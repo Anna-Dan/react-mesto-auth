@@ -5,11 +5,10 @@ import imageError from "../images/error.svg";
 function InfoTooltip(props) {
   return (
     <div
-      className="popup popup_opened"
-      //className={`popup ${props.isOpen && "popup_opened"}`}
+      className={`popup ${props.isOpen && "popup_opened"}`}
       onClick={props.handleOverlayClose}
     >
-      <div className="popup__container">
+      <div className="popup__container popup__container_type_auth">
         <button
           className="popup__close-button"
           type="button"

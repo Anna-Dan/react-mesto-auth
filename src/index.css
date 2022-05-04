@@ -6,6 +6,10 @@
 /* Шапка */
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
+@import url(./blocks/header/__button/header__button.css);
+@import url(./blocks/header/__link/header__link.css);
+@import url(./blocks/header/__email/header__email.css);
+@import url(./blocks/header/__nav/header__nav.css);
 /* Профиль */
 @import url(./blocks/profile/profile.css);
 @import url(./blocks/profile/__photo/profile__photo.css);
@@ -54,6 +58,7 @@
 @import url(./blocks/popup/__title/_type/popup__title_type_delete.css);
 @import url(./blocks/popup/__auth-image/popup__auth_image.css);
 @import url(./blocks/popup/__title/_type/popup__title_type_auth.css);
+@import url(./blocks/popup/__container/_type/popup__container_type_auth.css);
 /* Auth */
 @import url(./blocks/auth/auth.css);
 @import url(./blocks/auth/auth__title/auth__title.css);

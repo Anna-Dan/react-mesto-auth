@@ -1,6 +1,7 @@
 .popup__title_type_auth {
   text-align: center;
   line-height: 29px;
+  padding: 0 36px;
 }
 @media screen and (max-width: 540px) {
   .popup__title_type_auth {
