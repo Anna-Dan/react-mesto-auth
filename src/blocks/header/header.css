@@ -1,16 +1,10 @@
 .header {
   max-width: 880px;
-  /* margin: 0 auto; */
   display: grid;
   grid-template-columns: 1fr 1fr max-content;
-  /* padding: 45px 0 41px; */
   border-bottom: 1px solid rgba(84, 84, 84, 0.7);
   align-items: center;
   justify-items: end;
 }
 
-@media screen and (max-width: 660px) {
-  .header {
-    padding: 28px 0 31.6px;
-  }
-}
+

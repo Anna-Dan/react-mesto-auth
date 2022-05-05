@@ -5,3 +5,9 @@
   line-height: 17px;
   text-align: center;
 }
+
+@media screen and (max-width: 400px) {
+  .auth__text {
+    margin-top: 20px;
+  }
+}

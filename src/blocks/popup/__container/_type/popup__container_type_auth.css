@@ -4,3 +4,10 @@
   margin: 0;
   padding: 0;
 }
+
+@media screen and (max-width: 540px) {
+  .popup__container_type_auth {
+    width: 280px;
+    min-height: 308px;
+  }
+}
