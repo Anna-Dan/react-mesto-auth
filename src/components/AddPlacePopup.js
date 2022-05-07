@@ -25,7 +25,6 @@ function AddPlacePopup(props) {
       link: pictureLink,
     });
   }
- 
 
   return (
     <PopupWithForm
@@ -35,7 +34,7 @@ function AddPlacePopup(props) {
       isOpen={props.isOpen}
       onClose={props.onClose}
       handleOverlayClose={props.handleOverlayClose}
-      onSubmit={handleSubmit}      
+      onSubmit={handleSubmit}
     >
       <div className="popup__input-container">
         <input

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 
 import api from "../utils/Api";
@@ -38,8 +38,8 @@ function App() {
     api
       .changeLike(card._id, isLiked)
       .then((newCard) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c))
+        setCards((prevCards) =>
+          prevCards.map((c) => (c._id === card._id ? newCard : c))
         );
       })
       .catch((err) => {
@@ -52,7 +52,9 @@ function App() {
     api
       .deleteCard(card._id)
       .then(() => {
-        setCards(cards.filter((item) => item._id !== card._id));
+        setCards((prevCards) =>
+          prevCards.filter((item) => item._id !== card._id)
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -201,9 +203,9 @@ function App() {
   useEffect(() => {
     if (setLoggedIn) {
       Promise.all([api.getInitialCards(), api.getProfileInfo()])
-        .then((res) => {
-          setCards(res[0]);
-          setCurrentUser(res[1]);
+        .then(([cards, user]) => {
+          setCards(cards);
+          setCurrentUser(user);
         })
         .catch((err) => {
           console.log(err);
@@ -282,6 +284,7 @@ function App() {
             card={selectedCard}
             handleOverlayClose={handleOverlayClose}
           />
+
           <InfoTooltip
             onClose={closeAllPopups}
             isOpen={isInfoTooltipOpen}
