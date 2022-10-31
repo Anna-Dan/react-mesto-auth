@@ -1,22 +1,60 @@
-# Проект: Место
+# React-mesto-auth
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![React Router](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 
-### Интерактивная фотогалерея
+## Описание
 
-## В реализации применены:
+Данный проект- результат доработки проекта Mesto-react (https://github.com/Anna-Dan/mesto-react)
+Добавлены регистрация и авторизация.
 
-- Flexbox
-- Grid Layout
-- Методология БЭМ
-- Адаптивная верстка
-- Файловая структура Nested BEM
-- Git
-- JavaScript
-- Webpack
-- React JS
-- Functional Components
-- React Router
-- Работа с API
+## Применяемые технологии
 
-Проэкт выполнен в рамках практической части обучения в [Яндекс Практикум](https://practicum.yandex.ru/)
+– Semantic HTML layout
 
-_В планах доработать валидацию форм, попап подтверждения удаления карточки, бургер-меню для мобильной верстки_
+– JavaScript
+
+– React.js
+
+– OOP
+
+– Webpack
+
+– Работа с API
+
+
+## Локальная сборка и запуск проекта
+
+Клонируйте репозиторий
+
+```bash
+  git clone https://github.com/Anna-Dan/react-mesto-auth.git
+```
+
+Перейдите в директорию проекта
+
+```bash
+  cd react-mesto-auth
+```
+
+Установите зависимости
+
+```bash
+  npm install
+```
+
+Запустите проект
+
+```bash
+  npm run start
+```
+
+## Планы по доработке
+
+– Валидация форм
+
+– Попап подтверждения удаления карточки
+
+– Бургер-меню для мобильной верстки
